@@ -1,6 +1,9 @@
 from Champ import Champion
 
 class Team():
+    """
+    Team object
+    """
 
     def __init__(self, data, parent_game):
         self.teamId = data['teamId']

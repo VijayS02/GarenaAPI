@@ -10,6 +10,12 @@ if not os.path.isdir(STORE):
 
 
 def convert_inputs_md5(*args, **kwargs):
+    """
+    This function is used to check if the similar call to a function has already been made
+    :param args: The args to the given function
+    :param kwargs: The dictionary based arguments to a given function
+    :return: The md5 value of the specific inputs to the function.
+    """
     str_args = "~|~".join(args)
     str_kwargs = json.dumps(kwargs)
     combined = "ARGS:" + str_args + "|||KWARGS:" + str_kwargs
@@ -17,6 +23,11 @@ def convert_inputs_md5(*args, **kwargs):
 
 
 def raw_cache(func):
+    """
+    Automatically caches function calls so as to not repeat them. The caches are stored locally.
+
+    This is simply a decorator.
+    """
     def wrapper(*args, **kwargs):
         location = STORE + func.__name__ + "/"
         if not os.path.isdir(location):
@@ -35,6 +46,9 @@ def raw_cache(func):
 
 
 def write_json(file, data):
+    """
+    Write json data out to the given file.
+    """
     with open(file, 'w+') as outfile:
         json.dump(data, outfile)
 
@@ -45,6 +59,12 @@ def read_json(file):
 
 @raw_cache
 def general_data_request(endpoint, **kwargs):
+    """
+    Send a data request to the given API endpoint.
+    :param endpoint: The endpoint for which to send the get request
+    :param kwargs: The data to be passed to the requests.get() method.
+    :return: the data retrieved from the remote endpoint.
+    """
     request = requests.get(endpoint, **kwargs)
     if request.status_code == 200:
         return request.json()

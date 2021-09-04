@@ -13,6 +13,11 @@ class User():
     game_data: list[Game]
 
     def __init__(self, username: str, region: str = "TW"):
+        """
+        Initializes a user object
+        :param username: Username on the given region
+        :param region: Region to look into (e.g. TW, PH, SG...)
+        """
         user_info = {"name": username, "region": region}
 
         account_info = general_data_request("https://acs-garena.leagueoflegends.com/v1/players",
@@ -29,6 +34,12 @@ class User():
         self.games = user_data['games']
 
     def get_games(self, n=None, inplace=True):
+        """
+        Loads the given numbere of games, if n is none, then it will select as many as available from the api.
+        :param n: Number of games to lookup.
+        :param inplace: Loads the game data into the User object's game_data attribute.
+        :return: A list of game objects.
+        """
         link = f"https://acs-garena" \
                f".leagueoflegends.com/v1/stats/player_history/{self.region}/{self.accountId}"
         print(link)
@@ -52,16 +63,29 @@ class User():
         return game_data
 
     def get_game_ids(self):
+        """
+        Gets the game identifier based on currently loaded games.
+        :return: A list of ids
+        """
         ids = []
         for game in self.game_data:
             ids.append(game.get_id())
         return ids
 
     def sort_games(self, reverse=True):
+        """
+        Sort game data loaded into the current object.
+        :param reverse: To reverse the order of sorting
+        """
         self.game_data = sorted(self.game_data, key=lambda x: x.meta_info['gameCreation'],
                                 reverse=reverse)
 
     def get_kds(self, n):
+        """
+        Simple function to get KDAs of this current user based on n games
+        :param n: the number of games to get kds for
+        :return: lists, each containing the kds, kdas, kills and times of each game
+        """
         if n is None:
             n = len(self.game_data)
 
@@ -83,6 +107,10 @@ class User():
         return kds, kdas, kills, times
 
     def show_latest_games(self, n):
+        """
+        Display the games in a more neatly formatted order.
+        :param n: Number of games to display
+        """
         if n is None:
             n = len(self.game_data)
 
@@ -105,15 +133,20 @@ if __name__ == "__main__":
 
     WINDOW_SIZE = 30
 
+    # Example of user creation
     user = User("GregaryBack")
     user.get_games(3000, True)
 
+    # Print out all possible games
     user.show_latest_games(None)
 
+    # Get user KDA data
     kds, kdas, kills, time = user.get_kds(None)
     kds, kdas, kills = rolling_average(kds, WINDOW_SIZE), \
                        rolling_average(kdas, WINDOW_SIZE), rolling_average(kills, WINDOW_SIZE)
 
+
+    # Plot the KDA data.
     plt.plot(time[:len(kds)], kds, label="KDS")
     plt.plot(time[:len(kdas)], kdas, label="KDAS")
     plt.plot(time[:len(kills)], kills, label="Kills")

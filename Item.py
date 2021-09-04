@@ -1,4 +1,5 @@
 from Information import get_item_json
+# Load the raw item id
 RAW_ITEM_DATA = get_item_json()
 ITEM_INFO = {item['id']: item for item in RAW_ITEM_DATA}
 
