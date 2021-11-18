@@ -1,5 +1,6 @@
 # GarenaAPI
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Allows python acces to league of legends garena data. This uses simple requests to retrieve data from the LOL garena network.
 
 # Motivation
