@@ -12,4 +12,4 @@ Please consider the website's rate limits and do not overload the servers with r
 
 
 # Example
-Please see Example.py to see how to create a simple user query and view their match history.
+Please see [Example.py](Example.py) to see how to create a simple user query and view their match history.
